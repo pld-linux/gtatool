@@ -1,4 +1,4 @@
-# TODO: gdal, [lib]muparser, [lib]matio, [lib]pcl_io, [lib]pfs, dcmingle/dcmtk
+# TODO: [lib]muparser, [lib]matio, [lib]pcl_io, [lib]pfs, dcmingle/dcmtk
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -18,7 +18,7 @@ BuildRequires:	OpenEXR-devel
 BuildRequires:	QtGui-devel >= 4.4.3
 # libavformat >= 52.110.0 libavcodec libavdevice libavutil libswscale
 BuildRequires:	ffmpeg-devel
-#BuildRequires:	gdal-devel
+BuildRequires:	gdal-devel
 BuildRequires:	libgta-devel >= 0.9.4
 BuildRequires:	libsndfile-devel
 %{?with_apidocs:BuildRequires:	doxygen}
@@ -66,6 +66,18 @@ gtatool module to convert from FFmpeg formats.
 
 %description conv-ffmpeg -l pl.UTF-8
 Moduł gtatool do konwersji z formatów FFmpeg.
+
+%package conv-gdal
+Summary:	gtatool module to convert from/to GDAL supported formats
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatów obsługiwanych przez GDAL
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-gdal
+gtatool module to convert from/to GDAL supported formats.
+
+%description conv-gdal -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatów obsługiwanych przez GDAL.
 
 %package conv-magick
 Summary:	gtatool module to convert from/to ImageMagick supported formats
@@ -160,6 +172,10 @@ rm -rf $RPM_BUILD_ROOT
 %files conv-ffmpeg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-ffmpeg.so
+
+%files conv-gdal
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-gdal.so
 
 %files conv-magick
 %defattr(644,root,root,755)
