@@ -1,4 +1,4 @@
-# TODO: [lib]muparser, [lib]matio, [lib]pcl_io, [lib]pfs, dcmingle/dcmtk
+# TODO: [lib]matio, [lib]pcl_io >= 1.0, [lib]pfs, dcmingle/dcmtk
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -16,13 +16,14 @@ URL:		http://gta.nongnu.org/gtatool.html
 BuildRequires:	ImageMagick-c++-devel
 BuildRequires:	OpenEXR-devel
 BuildRequires:	QtGui-devel >= 4.4.3
+%{?with_apidocs:BuildRequires:	doxygen}
 # libavformat >= 52.110.0 libavcodec libavdevice libavutil libswscale
 BuildRequires:	ffmpeg-devel
 BuildRequires:	gdal-devel
 BuildRequires:	libgta-devel >= 0.9.4
 BuildRequires:	libsndfile-devel
-%{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	libstdc++-devel
+BuildRequires:	muparser-devel
 BuildRequires:	netpbm-devel
 BuildRequires:	pkgconfig
 BuildRequires:	qt4-build >= 4.4.3
@@ -42,6 +43,18 @@ tablicach etykietowanych).
 
 Pakiet zawiera zestaw poleceń obrabiających GTA na różnych poziomach,
 potrafiących importować i eksportować do wielu innych formatów plików.
+
+%package component-compute
+Summary:	gtatool module to compute array element components
+Summary(pl.UTF-8):	Moduł gtatool do obliczania składowych elementów tablicy
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description component-compute
+gtatool module to compute array element components.
+
+%description component-compute -l pl.UTF-8
+Moduł gtatool do obliczania składowych elementów tablicy.
 
 %package conv-exr
 Summary:	gtatool module to convert from/to EXR format
@@ -164,6 +177,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/gtatool/conv-raw.so
 %{_mandir}/man1/gta.1*
 %{_infodir}/gta.info*
+
+%files component-compute
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/component-compute.so
 
 %files conv-exr
 %defattr(644,root,root,755)
