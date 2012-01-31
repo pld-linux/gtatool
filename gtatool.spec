@@ -105,6 +105,18 @@ gtatool module to convert from/to ImageMagick supported formats.
 Moduł gtatool do konwersji z/do formatów obsługiwanych przez
 ImageMagick.
 
+%package conv-mat
+Summary:	gtatool module to convert from/to MAT format
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu MAT
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-mat
+gtatool module to convert from/to MAT (Matlab) format.
+
+%description conv-mat -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatu MAT (z programu Matlab).
+
 %package conv-netpbm
 Summary:	gtatool module to convert from/to NetPBM supported formats
 Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatów obsługiwanych przez NetPBM
@@ -197,6 +209,10 @@ rm -rf $RPM_BUILD_ROOT
 %files conv-magick
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-magick.so
+
+%files conv-mat
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-mat.so
 
 %files conv-netpbm
 %defattr(644,root,root,755)
