@@ -1,4 +1,4 @@
-# TODO: [lib]matio, [lib]pcl_io >= 1.0, [lib]pfs, dcmingle/dcmtk
+# TODO: [lib]pcl_io >= 1.0, dcmingle/dcmtk
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -25,6 +25,7 @@ BuildRequires:	libsndfile-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	muparser-devel
 BuildRequires:	netpbm-devel
+BuildRequires:	pfstools-devel
 BuildRequires:	pkgconfig
 BuildRequires:	qt4-build >= 4.4.3
 BuildRequires:	tar >= 1:1.22
@@ -129,6 +130,18 @@ gtatool module to convert from/to NetPBM supported formats.
 %description conv-netpbm -l pl.UTF-8
 Moduł gtatool do konwersji z/do formatów obsługiwanych przez NetPBM.
 
+%package conv-pfs
+Summary:	gtatool module to convert from/to PFS format
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu PFS
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-pfs
+gtatool module to convert from/to PFS format.
+
+%description conv-pfs -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatu PFS.
+
 %package conv-sndfile
 Summary:	gtatool module to convert from/to libsndfile supported formats
 Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatów obsługiwanych przez libsndfile
@@ -217,6 +230,10 @@ rm -rf $RPM_BUILD_ROOT
 %files conv-netpbm
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-netpbm.so
+
+%files conv-pfs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-pfs.so
 
 %files conv-sndfile
 %defattr(644,root,root,755)
