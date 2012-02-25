@@ -16,6 +16,7 @@ URL:		http://gta.nongnu.org/gtatool.html
 BuildRequires:	ImageMagick-c++-devel
 BuildRequires:	OpenEXR-devel
 BuildRequires:	QtGui-devel >= 4.4.3
+BuildRequires:	dcmtk-devel
 %{?with_apidocs:BuildRequires:	doxygen}
 # libavformat >= 52.110.0 libavcodec libavdevice libavutil libswscale
 BuildRequires:	ffmpeg-devel
@@ -56,6 +57,18 @@ gtatool module to compute array element components.
 
 %description component-compute -l pl.UTF-8
 Moduł gtatool do obliczania składowych elementów tablicy.
+
+%package conv-dcmtk
+Summary:	gtatool module to convert from DICOM format
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z formatu DICOM
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-dcmtk
+gtatool module to convert from DICOM format.
+
+%description conv-dcmtk -l pl.UTF-8
+Moduł gtatool do konwersji z formatu DICOM.
 
 %package conv-exr
 Summary:	gtatool module to convert from/to EXR format
@@ -206,6 +219,10 @@ rm -rf $RPM_BUILD_ROOT
 %files component-compute
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/component-compute.so
+
+%files conv-dcmtk
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-dcmtk.so
 
 %files conv-exr
 %defattr(644,root,root,755)
