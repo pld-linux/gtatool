@@ -1,4 +1,4 @@
-# TODO: [lib]pcl_io >= 1.0, dcmingle/dcmtk
+# TODO: [lib]pcl_io >= 1.0, teem/nrrd
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -6,29 +6,31 @@
 Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
-Version:	1.0.2
+Version:	1.2.0
 Release:	1
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://download.savannah.nongnu.org/releases/gta/%{name}-%{version}.tar.xz
-# Source0-md5:	13c454e28a760f03f691f9d21b5c08b3
+# Source0-md5:	d6db2b695e0bbbf898c241e97b2de786
 URL:		http://gta.nongnu.org/gtatool.html
 BuildRequires:	ImageMagick-c++-devel
 BuildRequires:	OpenEXR-devel
-BuildRequires:	QtGui-devel >= 4.4.3
+BuildRequires:	QtGui-devel >= 4.6
 BuildRequires:	dcmtk-devel
 %{?with_apidocs:BuildRequires:	doxygen}
 # libavformat >= 52.110.0 libavcodec libavdevice libavutil libswscale
 BuildRequires:	ffmpeg-devel
 BuildRequires:	gdal-devel
 BuildRequires:	libgta-devel >= 0.9.4
+BuildRequires:	libjpeg-devel
 BuildRequires:	libsndfile-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	matio-devel
 BuildRequires:	muparser-devel
 BuildRequires:	netpbm-devel
 BuildRequires:	pfstools-devel
 BuildRequires:	pkgconfig
-BuildRequires:	qt4-build >= 4.4.3
+BuildRequires:	qt4-build >= 4.6
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -106,6 +108,18 @@ gtatool module to convert from/to GDAL supported formats.
 %description conv-gdal -l pl.UTF-8
 Moduł gtatool do konwersji z/do formatów obsługiwanych przez GDAL.
 
+%package conv-jpeg
+Summary:	gtatool module to convert from/to JPEG formats
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu JPEG
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-jpeg
+gtatool module to convert from/to JPEG formats.
+
+%description conv-jpeg -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatu JPEG.
+
 %package conv-magick
 Summary:	gtatool module to convert from/to ImageMagick supported formats
 Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatów obsługiwanych przez ImageMagick
@@ -173,7 +187,7 @@ Summary:	Qt-based GUI module for gtatool
 Summary(pl.UTF-8):	Moduł graficznego interfejsu użytkownika opartego na Qt dla narzędzia gtatool
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
-Requires:	QtGui >= 4.4.3
+Requires:	QtGui >= 4.6
 
 %description gui
 Qt-based GUI module for gtatool.
@@ -210,7 +224,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog NEWS README
 %attr(755,root,root) %{_bindir}/gta
 %dir %{_libdir}/gtatool
+%attr(755,root,root) %{_libdir}/gtatool/conv-csv.so
+%attr(755,root,root) %{_libdir}/gtatool/conv-datraw.so
 %attr(755,root,root) %{_libdir}/gtatool/conv-ply.so
+%attr(755,root,root) %{_libdir}/gtatool/conv-pvm.so
 %attr(755,root,root) %{_libdir}/gtatool/conv-rat.so
 %attr(755,root,root) %{_libdir}/gtatool/conv-raw.so
 %{_mandir}/man1/gta.1*
@@ -236,6 +253,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-gdal.so
 
+%files conv-jpeg
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-jpeg.so
+
 %files conv-magick
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-magick.so
@@ -259,3 +280,6 @@ rm -rf $RPM_BUILD_ROOT
 %files gui
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/gui.so
+%{_desktopdir}/gta_gui.desktop
+%{_iconsdir}/hicolor/*/apps/gta.png
+%{_iconsdir}/hicolor/scalable/apps/gta.svg
