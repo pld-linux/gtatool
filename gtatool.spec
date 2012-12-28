@@ -1,36 +1,52 @@
-# TODO: [lib]pcl_io >= 1.0, teem/nrrd
+# TODO: teem/nrrd
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
+%bcond_without	qt		# Qt-based GUI
+%bcond_without	muparser	# compute component module (based on MuParser)
+%bcond_without	dcmtk		# DCMTK conv module
+%bcond_without	ffmpeg		# FFmpeg conv module
+%bcond_without	gdal		# GDAL conv module
+%bcond_without	jpeg		# JPEG conv module (based on libjpeg)
+%bcond_without	magick		# Magick conv module (based on ImageMagick's libMagick++)
+%bcond_without	matio		# MAT conv module (MATLAB import/export, based on [lib]matio)
+%bcond_without	netcdf		# NetCDF conv module
+%bcond_without	netpbm		# NetPBM conv module
+%bcond_without	openexr		# EXR conv module (based on OpenEXR)
+%bcond_without	pcl		# PCD conv module (based on PCL's libpcl_io)
+%bcond_without	pfs		# PFS conv module
+%bcond_without	sndfile		# sndfile conv module
 #
 Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
-Version:	1.2.0
+Version:	1.3.1
 Release:	1
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://download.savannah.nongnu.org/releases/gta/%{name}-%{version}.tar.xz
-# Source0-md5:	d6db2b695e0bbbf898c241e97b2de786
+# Source0-md5:	2125af21cb29d049cdc789aedf078e58
 URL:		http://gta.nongnu.org/gtatool.html
-BuildRequires:	ImageMagick-c++-devel
-BuildRequires:	OpenEXR-devel
-BuildRequires:	QtGui-devel >= 4.6
-BuildRequires:	dcmtk-devel
+%{?with_magick:BuildRequires:	ImageMagick-c++-devel}
+%{?with_openexr:BuildRequires:	OpenEXR-devel}
+%{?with_qt:BuildRequires:	QtGui-devel >= 4.6}
+%{?with_dcmtk:BuildRequires:	dcmtk-devel}
 %{?with_apidocs:BuildRequires:	doxygen}
-# libavformat >= 52.110.0 libavcodec libavdevice libavutil libswscale
-BuildRequires:	ffmpeg-devel
-BuildRequires:	gdal-devel
+# libavformat >= 52.110.0 libavdevice libswscale
+%{?with_ffmpeg:BuildRequires:	ffmpeg-devel}
+%{?with_gdal:BuildRequires:	gdal-devel}
 BuildRequires:	libgta-devel >= 0.9.4
-BuildRequires:	libjpeg-devel
-BuildRequires:	libsndfile-devel
+%{?with_jpeg:BuildRequires:	libjpeg-devel}
+%{?with_sndfile:BuildRequires:	libsndfile-devel}
 BuildRequires:	libstdc++-devel
-BuildRequires:	matio-devel
-BuildRequires:	muparser-devel
-BuildRequires:	netpbm-devel
-BuildRequires:	pfstools-devel
+%{?with_matio:BuildRequires:	matio-devel}
+%{?with_muparser:BuildRequires:	muparser-devel}
+%{?with_netcdf:BuildRequires:	netcdf-devel}
+%{?with_netpbm:BuildRequires:	netpbm-devel}
+%{?with_pcl:BuildRequires:	pcl-devel >= 1.6}
+%{?with_pfs:BuildRequires:	pfstools-devel}
 BuildRequires:	pkgconfig
-BuildRequires:	qt4-build >= 4.6
+%{?with_qt:BuildRequires:	qt4-build >= 4.6}
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -145,6 +161,18 @@ gtatool module to convert from/to MAT (Matlab) format.
 %description conv-mat -l pl.UTF-8
 Moduł gtatool do konwersji z/do formatu MAT (z programu Matlab).
 
+%package conv-netcdf
+Summary:	gtatool module to convert from/to NetCDF format
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu NetCDF
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-netcdf
+gtatool module to convert from/to NetCDF format.
+
+%description conv-netcdf -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatu NetCDF.
+
 %package conv-netpbm
 Summary:	gtatool module to convert from/to NetPBM supported formats
 Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatów obsługiwanych przez NetPBM
@@ -156,6 +184,18 @@ gtatool module to convert from/to NetPBM supported formats.
 
 %description conv-netpbm -l pl.UTF-8
 Moduł gtatool do konwersji z/do formatów obsługiwanych przez NetPBM.
+
+%package conv-pcd
+Summary:	gtatool module to convert from/to PCD format
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu PCD
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-pcd
+gtatool module to convert from/to PCD format.
+
+%description conv-pcd -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatu PCD.
 
 %package conv-pfs
 Summary:	gtatool module to convert from/to PFS format
@@ -201,7 +241,21 @@ gtatool.
 
 %build
 %configure \
-	--disable-silent-rules
+	--disable-silent-rules \
+	%{!?with_dcmtk:--without-dcmtk} \
+	%{!?with_ffmpeg:--without-ffmpeg} \
+	%{!?with_gdal:--without-gdal} \
+	%{!?with_jpeg:--without-jpeg} \
+	%{!?with_magick:--without-magick} \
+	%{!?with_matio:--without-matio} \
+	%{!?with_muparser:--without-muparser} \
+	%{!?with_netcdf:--without-netcdf} \
+	%{!?with_netpbm:--without-netpbm} \
+	%{!?with_openexr:--without-openexr} \
+	%{!?with_pcl:--without-pcd} \
+	%{!?with_pfs:--without-pfs} \
+	%{!?with_qt:--without-qt} \
+	%{!?with_sndfile:--without-sndfile}
 %{__make}
 
 %install
@@ -233,53 +287,89 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/gta.1*
 %{_infodir}/gta.info*
 
+%if %{with muparser}
 %files component-compute
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/component-compute.so
+%endif
 
+%if %{with dcmtk}
 %files conv-dcmtk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-dcmtk.so
+%endif
 
+%if %{with openexr}
 %files conv-exr
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-exr.so
+%endif
 
+%if %{with ffmpeg}
 %files conv-ffmpeg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-ffmpeg.so
+%endif
 
+%if %{with gdal}
 %files conv-gdal
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-gdal.so
+%endif
 
+%if %{with jpeg}
 %files conv-jpeg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-jpeg.so
+%endif
 
+%if %{with magick}
 %files conv-magick
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-magick.so
+%endif
 
+%if %{with matio}
 %files conv-mat
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-mat.so
+%endif
 
+%if %{with netcdf}
+%files conv-netcdf
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-netcdf.so
+%endif
+
+%if %{with netpbm}
 %files conv-netpbm
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-netpbm.so
+%endif
 
+%if %{with pcl}
+%files conv-pcd
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-pcd.so
+%endif
+
+%if %{with pfs}
 %files conv-pfs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-pfs.so
+%endif
 
+%if %{with sndfile}
 %files conv-sndfile
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-sndfile.so
+%endif
 
+%if %{with qt}
 %files gui
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/gui.so
 %{_desktopdir}/gta_gui.desktop
 %{_iconsdir}/hicolor/*/apps/gta.png
 %{_iconsdir}/hicolor/scalable/apps/gta.svg
+%endif
