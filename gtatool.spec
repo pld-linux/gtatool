@@ -16,6 +16,7 @@
 %bcond_without	pcl		# PCD conv module (based on PCL's libpcl_io)
 %bcond_without	pfs		# PFS conv module
 %bcond_without	sndfile		# sndfile conv module
+%bcond_without	teem		# teem (nrrd) conv module
 #
 Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
@@ -48,6 +49,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
 %{?with_qt:BuildRequires:	qt4-build >= 4.6}
 BuildRequires:	tar >= 1:1.22
+%{?with_teem:BuildRequires:	teem-devel}
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -222,6 +224,18 @@ gtatool module to convert from/to libsndfile supported formats.
 Moduł gtatool do konwersji z/do formatów obsługiwanych przez
 libsndfile.
 
+%package conv-teem
+Summary:	gtatool module to convert from/to Teem (NRRD) format
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu Teem (NRRD)
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-teem
+gtatool module to convert from/to Teem (NRRD) format.
+
+%description conv-teem -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatu Teem (NRRD).
+
 %package gui
 Summary:	Qt-based GUI module for gtatool
 Summary(pl.UTF-8):	Moduł graficznego interfejsu użytkownika opartego na Qt dla narzędzia gtatool
@@ -255,7 +269,8 @@ gtatool.
 	%{!?with_pcl:--without-pcd} \
 	%{!?with_pfs:--without-pfs} \
 	%{!?with_qt:--without-qt} \
-	%{!?with_sndfile:--without-sndfile}
+	%{!?with_sndfile:--without-sndfile} \
+	%{!?with_teem:--without-teem}
 %{__make}
 
 %install
@@ -363,6 +378,12 @@ rm -rf $RPM_BUILD_ROOT
 %files conv-sndfile
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/conv-sndfile.so
+%endif
+
+%if %{with teem}
+%files conv-teem
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-teem.so
 %endif
 
 %if %{with qt}
