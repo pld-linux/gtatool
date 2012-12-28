@@ -1,4 +1,3 @@
-# TODO: teem/nrrd
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
