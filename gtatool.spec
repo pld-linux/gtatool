@@ -20,12 +20,12 @@
 Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
-Version:	1.5.0
+Version:	1.5.1
 Release:	1
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
-# Source0-md5:	2cce87f0880e1042af3fd18c9f9b3e24
+# Source0-md5:	0b31c12493484a26321cf53dec24b92b
 URL:		http://gta.nongnu.org/gtatool.html
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
@@ -249,6 +249,19 @@ Qt-based GUI module for gtatool.
 Moduł graficznego interfejsu użytkownika opartego na Qt dla narzędzia
 gtatool.
 
+%package -n bash-completion-gtatool
+Summary:	Bash completion for gtatool command
+Summary(pl.UTF-8):	Bashowe uzupełnianie parametrów programu gtatool
+Group:		Applications/Shells
+Requires:	%{name} = %{version}-%{release}
+Requires:	bash-completion
+
+%description -n bash-completion-gtatool
+Bash completion for gtatool command.
+
+%description -n bash-completion-gtatool -l pl.UTF-8
+Bashowe uzupełnianie parametrów programu gtatool.
+
 %prep
 %setup -q
 
@@ -393,3 +406,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/*/apps/gta.png
 %{_iconsdir}/hicolor/scalable/apps/gta.svg
 %endif
+
+%files -n bash-completion-gtatool
+%defattr(644,root,root,755)
+/etc/bash_completion.d/gta-completion.bash
