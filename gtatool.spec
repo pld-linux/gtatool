@@ -12,7 +12,7 @@
 %bcond_without	netcdf		# NetCDF conv module
 %bcond_without	netpbm		# NetPBM conv module
 %bcond_without	openexr		# EXR conv module (based on OpenEXR)
-%bcond_without	pcl		# PCD conv module (based on PCL's libpcl_io)
+%bcond_with	pcl		# PCD conv module (based on PCL's libpcl_io)
 %bcond_without	pfs		# PFS conv module
 %bcond_without	sndfile		# sndfile conv module
 %bcond_without	teem		# teem (nrrd) conv module
@@ -21,7 +21,7 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	1.5.1
-Release:	3
+Release:	4
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
