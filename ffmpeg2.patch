@@ -1,0 +1,12 @@
+--- gtatool-1.5.2/src/conv-ffmpeg/media_object.cpp~	2013-04-28 20:24:13.884124701 +0200
++++ gtatool-1.5.2/src/conv-ffmpeg/media_object.cpp	2013-08-29 17:43:44.081721565 +0200
+@@ -149,6 +149,9 @@
+ 
+ // Hide the FFmpeg stuff so that their messy header files cannot cause problems
+ // in other source files.
++#ifndef AVCODEC_MAX_AUDIO_FRAME_SIZE
++#define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000
++#endif
+ 
+ static const size_t audio_tmpbuf_size = (AVCODEC_MAX_AUDIO_FRAME_SIZE * 3) / 2;
+ 
