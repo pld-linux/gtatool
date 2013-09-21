@@ -1,0 +1,99 @@
+--- gtatool-1.5.2/configure.ac.orig	2013-04-29 20:53:48.413184320 +0200
++++ gtatool-1.5.2/configure.ac	2013-09-21 12:46:22.572690031 +0200
+@@ -391,11 +391,12 @@
+     [if test "$withval" = "yes"; then pcd="yes"; else pcd="no "; fi], [pcd="yes"])
+ if test "$pcd" = "yes"; then
+     PKG_CHECK_MODULES([libpcl_io], [pcl_io >= 1.6], [],
++        [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.7 >= 1.7], [],
+         [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.6 >= 1.6], [],
+             [pcd="no "
+             AC_MSG_WARN([PCL io library not found:])
+             AC_MSG_WARN([$libpcl_io_PKG_ERRORS])
+-            AC_MSG_WARN([Disabled the from-pcd and to-pcd commands.])])])
++            AC_MSG_WARN([Disabled the from-pcd and to-pcd commands.])])])])
+ fi
+ AC_DEFINE_UNQUOTED([WITH_PCD], [`if test "$pcd" = "yes"; then echo "1"; else echo "0"; fi`], [Use pcd?])
+ AM_CONDITIONAL([WITH_PCD], [test "$pcd" = "yes"])
+--- gtatool-1.5.2/src/conv-pcd/from-pcd.cpp.orig	2013-04-28 20:24:13.896124699 +0200
++++ gtatool-1.5.2/src/conv-pcd/from-pcd.cpp	2013-09-21 15:10:38.875660094 +0200
+@@ -46,7 +46,7 @@
+             "Currently only combinations of XYZ, normal, intensity, RGB/RGBA are supported.");
+ }
+ 
+-bool have_field(const sensor_msgs::PointCloud2& cloud_blob, const char* name)
++bool have_field(const pcl::PCLPointCloud2& cloud_blob, const char* name)
+ {
+     for (size_t i = 0; i < cloud_blob.fields.size(); i++)
+         if (cloud_blob.fields[i].name == std::string(name))
+@@ -76,7 +76,7 @@
+         array_loop_t array_loop;
+         array_loop.start(std::vector<std::string>(1, namei), arguments.size() == 2 ? arguments[1] : "");
+ 
+-        sensor_msgs::PointCloud2 cloud_blob;
++	pcl::PCLPointCloud2 cloud_blob;
+         if (pcl::io::loadPCDFile(namei.c_str(), cloud_blob) == -1)
+         {
+             throw exc(namei + ": cannot read file.");
+@@ -95,7 +95,7 @@
+         {
+             // pcl::PointXYZ
+             pcl::PointCloud<pcl::PointXYZ> cloud;
+-            pcl::fromROSMsg(cloud_blob, cloud);
++            pcl::fromPCLPointCloud2(cloud_blob, cloud);
+             hdr.set_dimensions(cloud.points.size());
+             hdr.set_components(gta::float32, gta::float32, gta::float32);
+             hdr.component_taglist(0).set("INTERPRETATION", "X");
+@@ -117,7 +117,7 @@
+         {
+             // pcl::PointXYZI
+             pcl::PointCloud<pcl::PointXYZI> cloud;
+-            pcl::fromROSMsg(cloud_blob, cloud);
++            pcl::fromPCLPointCloud2(cloud_blob, cloud);
+             hdr.set_dimensions(cloud.points.size());
+             hdr.set_components(gta::float32, gta::float32, gta::float32, gta::float32);
+             hdr.component_taglist(0).set("INTERPRETATION", "X");
+@@ -140,7 +140,7 @@
+         {
+             // pcl::PointXYZRGB
+             pcl::PointCloud<pcl::PointXYZRGB> cloud;
+-            pcl::fromROSMsg(cloud_blob, cloud);
++            pcl::fromPCLPointCloud2(cloud_blob, cloud);
+             hdr.set_dimensions(cloud.points.size());
+             std::vector<gta::type> types(3, gta::float32);
+             types.resize(6, gta::uint8);
+@@ -176,7 +176,7 @@
+         {
+             // pcl::PointXYZRGBA
+             pcl::PointCloud<pcl::PointXYZRGBA> cloud;
+-            pcl::fromROSMsg(cloud_blob, cloud);
++            pcl::fromPCLPointCloud2(cloud_blob, cloud);
+             hdr.set_dimensions(cloud.points.size());
+             std::vector<gta::type> types(3, gta::float32);
+             types.resize(7, gta::uint8);
+@@ -215,7 +215,7 @@
+         {
+             // pcl::PointNormal
+             pcl::PointCloud<pcl::PointNormal> cloud;
+-            pcl::fromROSMsg(cloud_blob, cloud);
++            pcl::fromPCLPointCloud2(cloud_blob, cloud);
+             hdr.set_dimensions(cloud.points.size());
+             std::vector<gta::type> types(6, gta::float32);
+             hdr.set_components(6, &(types[0]));
+@@ -244,7 +244,7 @@
+         {
+             // pcl::PointXYZINormal
+             pcl::PointCloud<pcl::PointXYZINormal> cloud;
+-            pcl::fromROSMsg(cloud_blob, cloud);
++            pcl::fromPCLPointCloud2(cloud_blob, cloud);
+             hdr.set_dimensions(cloud.points.size());
+             std::vector<gta::type> types(7, gta::float32);
+             hdr.set_components(7, &(types[0]));
+@@ -274,7 +274,7 @@
+         {
+             // pcl::PointXYZRGBNormal
+             pcl::PointCloud<pcl::PointXYZRGBNormal> cloud;
+-            pcl::fromROSMsg(cloud_blob, cloud);
++            pcl::fromPCLPointCloud2(cloud_blob, cloud);
+             hdr.set_dimensions(cloud.points.size());
+             std::vector<gta::type> types(6, gta::float32);
+             types.resize(9, gta::uint8);

@@ -12,7 +12,7 @@
 %bcond_without	netcdf		# NetCDF conv module
 %bcond_without	netpbm		# NetPBM conv module
 %bcond_without	openexr		# EXR conv module (based on OpenEXR)
-%bcond_with	pcl		# PCD conv module (based on PCL's libpcl_io)
+%bcond_without	pcl		# PCD conv module (based on PCL's libpcl_io)
 %bcond_without	pfs		# PFS conv module
 %bcond_without	sndfile		# sndfile conv module
 %bcond_without	teem		# teem (nrrd) conv module
@@ -27,10 +27,13 @@ Group:		Applications/File
 Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
 # Source0-md5:	1f899e0872d0d706878844bb7f48bc7e
 Patch0:		ffmpeg2.patch
+Patch1:		%{name}-pcl.patch
 URL:		http://gta.nongnu.org/gtatool.html
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
 %{?with_qt:BuildRequires:	QtGui-devel >= 4.6}
+BuildRequires:	autoconf >= 2.65
+BuildRequires:	automake >= 1:1.11.1
 %{?with_dcmtk:BuildRequires:	dcmtk-devel}
 %{?with_apidocs:BuildRequires:	doxygen}
 # libavformat >= 52.110.0 libavdevice libswscale
@@ -40,11 +43,12 @@ BuildRequires:	libgta-devel >= 0.9.4
 %{?with_jpeg:BuildRequires:	libjpeg-devel}
 %{?with_sndfile:BuildRequires:	libsndfile-devel}
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtool
 %{?with_matio:BuildRequires:	matio-devel}
 %{?with_muparser:BuildRequires:	muparser-devel}
 %{?with_netcdf:BuildRequires:	netcdf-devel}
 %{?with_netpbm:BuildRequires:	netpbm-devel}
-%{?with_pcl:BuildRequires:	pcl-devel >= 1.6}
+%{?with_pcl:BuildRequires:	pcl-devel >= 1.7}
 %{?with_pfs:BuildRequires:	pfstools-devel}
 BuildRequires:	pkgconfig
 %{?with_qt:BuildRequires:	qt4-build >= 4.6}
@@ -266,8 +270,14 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal} -I m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	--disable-silent-rules \
 	%{!?with_dcmtk:--without-dcmtk} \
