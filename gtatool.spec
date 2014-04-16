@@ -32,7 +32,6 @@ URL:		http://gta.nongnu.org/gtatool.html
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
 %{?with_qt:BuildRequires:	QtGui-devel >= 4.6}
-BuildRequires:	OpenCL-devel
 BuildRequires:	autoconf >= 2.65
 BuildRequires:	automake >= 1:1.11.1
 %{?with_dcmtk:BuildRequires:	dcmtk-devel}
