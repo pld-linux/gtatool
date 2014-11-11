@@ -1,0 +1,12 @@
+--- gtatool-2.0.1/src/base/opt.h~	2014-11-11 10:32:38.000000000 +0100
++++ gtatool-2.0.1/src/base/opt.h	2014-11-11 10:36:22.137550614 +0100
+@@ -26,6 +26,9 @@
+ #include <cstdio>
+ #include <stdint.h>
+ 
++#undef no_argument
++#undef required_argument
++#undef optional_argument
+ /**
+  * \brief Command line parsing
+  *

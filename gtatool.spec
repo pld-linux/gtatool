@@ -21,13 +21,14 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	2.0.1
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
 # Source0-md5:	1133c5687bd14d321eefffab6b495d74
 Patch0:		ffmpeg2.patch
 Patch1:		%{name}-pcl.patch
+Patch2:		%{name}-getopt.patch
 URL:		http://gta.nongnu.org/gtatool.html
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
@@ -274,6 +275,7 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %setup -q
 %patch0 -p1
 #%patch1 -p1
+%patch2 -p1
 
 %build
 %{__libtoolize}
@@ -287,6 +289,7 @@ Bashowe uzupełnianie parametrów programu gtatool.
 	%{!?with_ffmpeg:--without-ffmpeg} \
 	%{!?with_gdal:--without-gdal} \
 	%{!?with_jpeg:--without-jpeg} \
+	%{?with_magick:--with-magick-flavor=ImageMagick} \
 	%{!?with_magick:--without-magick} \
 	%{!?with_matio:--without-matio} \
 	%{!?with_muparser:--without-muparser} \
@@ -417,6 +420,7 @@ rm -rf $RPM_BUILD_ROOT
 %files gui
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/gui.so
+%attr(755,root,root) %{_libdir}/gtatool/view.so
 %{_desktopdir}/gta_gui.desktop
 %{_iconsdir}/hicolor/*/apps/gta.png
 %{_iconsdir}/hicolor/scalable/apps/gta.svg
@@ -424,4 +428,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n bash-completion-gtatool
 %defattr(644,root,root,755)
-/etc/bash_completion.d/gta-completion.bash
+%{_datadir}/bash-completion/completions/gta
