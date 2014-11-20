@@ -1,0 +1,13 @@
+--- gtatool-2.0.1/configure.ac.orig	2014-09-26 18:11:47.883400950 +0200
++++ gtatool-2.0.1/configure.ac	2014-11-20 20:47:38.490845092 +0100
+@@ -641,8 +641,8 @@
+ dnl bash-completion
+ AC_ARG_WITH([bashcompletion],
+     [AS_HELP_STRING([--with-bash-completion], [Enable bash-completion support. Enabled by default if bash-completion is available.])],
+-    [if test "$withval" = "yes"; then bashcompletion="yes"; else bashcompletion="no "; fi], [bashcompletion="yes"])
+-if test "$bashcompletion" = "yes"; then
++    [if test "$withval" = "yes"; then bashcompletion="yes"; else bashcompletion="no "; fi], [bashcompletion="maybe"])
++if test "$bashcompletion" = "maybe"; then
+     AC_MSG_CHECKING([for bash-completion])
+     PKG_CHECK_EXISTS([bash-completion >= 0.0], [AC_MSG_RESULT([yes])],
+         [AC_MSG_RESULT([no])

@@ -1,3 +1,6 @@
+# TODO: pmd (BR: proprietary libpmdaccess2)
+# libequalizer (pkgconfig(Equalizer) >= 1.0.0) for multi-display OpenGL support
+# libgls (pkgconfig(gls) >= 1.0.0) for stereoscopic-3D OpenGL support
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -27,12 +30,14 @@ Group:		Applications/File
 Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
 # Source0-md5:	1133c5687bd14d321eefffab6b495d74
 Patch0:		ffmpeg2.patch
-Patch1:		%{name}-pcl.patch
-Patch2:		%{name}-getopt.patch
+Patch1:		%{name}-getopt.patch
+Patch2:		%{name}-bashcomp.patch
 URL:		http://gta.nongnu.org/gtatool.html
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
-%{?with_qt:BuildRequires:	QtGui-devel >= 4.6}
+%{?with_qt:BuildRequires:	OpenGL-devel}
+%{?with_qt:BuildRequires:	QtGui-devel >= 4.8}
+%{?with_qt:BuildRequires:	QtOpenGL-devel >= 4.8}
 BuildRequires:	autoconf >= 2.65
 BuildRequires:	automake >= 1:1.11.1
 %{?with_dcmtk:BuildRequires:	dcmtk-devel}
@@ -40,19 +45,21 @@ BuildRequires:	automake >= 1:1.11.1
 # libavformat >= 52.110.0 libavdevice libswscale
 %{?with_ffmpeg:BuildRequires:	ffmpeg-devel}
 %{?with_gdal:BuildRequires:	gdal-devel}
+%{?with_qt:BuildRequires:	glew-devel >= 1.6.0}
 BuildRequires:	libgta-devel >= 0.9.4
 %{?with_jpeg:BuildRequires:	libjpeg-devel}
 %{?with_sndfile:BuildRequires:	libsndfile-devel}
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool
-%{?with_matio:BuildRequires:	matio-devel}
+BuildRequires:	libtool >= 2:2.2.6
+%{?with_matio:BuildRequires:	matio-devel >= 1.5.0}
 %{?with_muparser:BuildRequires:	muparser-devel}
 %{?with_netcdf:BuildRequires:	netcdf-devel}
 %{?with_netpbm:BuildRequires:	netpbm-devel}
 %{?with_pcl:BuildRequires:	pcl-devel >= 1.7}
-%{?with_pfs:BuildRequires:	pfstools-devel}
+%{?with_pfs:BuildRequires:	pfstools-devel >= 1.2}
 BuildRequires:	pkgconfig
-%{?with_qt:BuildRequires:	qt4-build >= 4.6}
+%{?with_qt:BuildRequires:	qt4-build >= 4.8}
+BuildRequires:	rpmbuild(macros) >= 1.673
 BuildRequires:	tar >= 1:1.22
 %{?with_teem:BuildRequires:	teem-devel}
 BuildRequires:	xz
@@ -161,6 +168,7 @@ Summary:	gtatool module to convert from/to MAT format
 Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu MAT
 Group:		Applications/File
 Requires:	%{name} = %{version}-%{release}
+Requires:	matio >= 1.5.0
 
 %description conv-mat
 gtatool module to convert from/to MAT (Matlab) format.
@@ -246,7 +254,7 @@ Summary:	Qt-based GUI module for gtatool
 Summary(pl.UTF-8):	Moduł graficznego interfejsu użytkownika opartego na Qt dla narzędzia gtatool
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
-Requires:	QtGui >= 4.6
+Requires:	QtGui >= 4.8
 
 %description gui
 Qt-based GUI module for gtatool.
@@ -260,7 +268,7 @@ Summary:	Bash completion for gtatool command
 Summary(pl.UTF-8):	Bashowe uzupełnianie parametrów programu gtatool
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
-Requires:	bash-completion
+Requires:	bash-completion >= 2
 %if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
 %endif
@@ -274,7 +282,7 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %prep
 %setup -q
 %patch0 -p1
-#%patch1 -p1
+%patch1 -p1
 %patch2 -p1
 
 %build
@@ -284,7 +292,9 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %{__autoheader}
 %{__automake}
 %configure \
+	BASHCOMPLETIONDIR=%{bash_compdir} \
 	--disable-silent-rules \
+	--with-bashcompletion \
 	%{!?with_dcmtk:--without-dcmtk} \
 	%{!?with_ffmpeg:--without-ffmpeg} \
 	%{!?with_gdal:--without-gdal} \
@@ -428,4 +438,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n bash-completion-gtatool
 %defattr(644,root,root,755)
-%{_datadir}/bash-completion/completions/gta
+%{bash_compdir}/gta
