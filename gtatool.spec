@@ -24,7 +24,7 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	2.0.1
-Release:	4
+Release:	5
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
@@ -32,6 +32,7 @@ Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
 Patch0:		ffmpeg2.patch
 Patch1:		%{name}-getopt.patch
 Patch2:		%{name}-bashcomp.patch
+Patch3:		pfstools2.patch
 URL:		http://gta.nongnu.org/gtatool.html
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
@@ -56,7 +57,7 @@ BuildRequires:	libtool >= 2:2.2.6
 %{?with_netcdf:BuildRequires:	netcdf-devel}
 %{?with_netpbm:BuildRequires:	netpbm-devel}
 %{?with_pcl:BuildRequires:	pcl-devel >= 1.7}
-%{?with_pfs:BuildRequires:	pfstools-devel >= 1.2}
+%{?with_pfs:BuildRequires:	pfstools-devel >= 2.0}
 BuildRequires:	pkgconfig
 %{?with_qt:BuildRequires:	qt4-build >= 4.8}
 BuildRequires:	rpmbuild(macros) >= 1.673
@@ -284,6 +285,7 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
