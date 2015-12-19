@@ -24,7 +24,7 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	2.0.1
-Release:	6
+Release:	7
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
