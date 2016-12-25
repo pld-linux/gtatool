@@ -1,0 +1,24 @@
+diff -ur gtatool-2.0.1/configure.ac gtatool-2.0.1-im7/configure.ac
+--- gtatool-2.0.1/configure.ac	2016-12-25 20:39:54.318816756 +0100
++++ gtatool-2.0.1-im7/configure.ac	2016-12-25 20:34:09.014766195 +0100
+@@ -368,7 +368,7 @@
+             AC_MSG_WARN([$libmagick_PKG_ERRORS])
+             AC_MSG_WARN([Disabled the from-magick and to-magick commands.])])
+     else
+-        PKG_CHECK_MODULES([libmagick], [ImageMagick++ >= 0.0], [],
++        PKG_CHECK_MODULES([libmagick], [Magick++ >= 0.0], [],
+             [magick="no "
+             AC_MSG_WARN([ImageMagick++ library not found:])
+             AC_MSG_WARN([$libmagick_PKG_ERRORS])
+diff -ur gtatool-2.0.1/src/conv-magick/from-magick.cpp gtatool-2.0.1-im7/src/conv-magick/from-magick.cpp
+--- gtatool-2.0.1/src/conv-magick/from-magick.cpp	2014-09-20 20:16:58.484142786 +0200
++++ gtatool-2.0.1-im7/src/conv-magick/from-magick.cpp	2016-12-25 20:39:28.231335556 +0100
+@@ -102,7 +102,7 @@
+             bool is_graylevel = false;
+             if (format.value().empty())
+             {
+-                has_alpha = imgs[i].matte();
++                has_alpha = imgs[i].alpha();
+                 is_graylevel = (imgs[i].colorSpace() == Magick::GRAYColorspace);
+             }
+             else if (format.value().compare("l") == 0)
