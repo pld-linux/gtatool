@@ -9,6 +9,7 @@
 %bcond_without	dcmtk		# DCMTK conv module
 %bcond_without	ffmpeg		# FFmpeg conv module
 %bcond_without	gdal		# GDAL conv module
+%bcond_without	png		# PNG conv module
 %bcond_without	jpeg		# JPEG conv module (based on libjpeg)
 %bcond_without	magick		# Magick conv module (based on ImageMagick's libMagick++)
 %bcond_without	matio		# MAT conv module (MATLAB import/export, based on [lib]matio)
@@ -23,25 +24,22 @@
 Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
-Version:	2.0.1
-Release:	21
+Version:	2.2.3
+Release:	1
 License:	GPL v3+
 Group:		Applications/File
-Source0:	http://download.savannah.gnu.org/releases/gta/%{name}-%{version}.tar.xz
-# Source0-md5:	1133c5687bd14d321eefffab6b495d74
-Patch0:		ffmpeg2.patch
+Source0:	https://marlam.de/gta/releases/%{name}-%{version}.tar.xz
+# Source0-md5:	afa7556b180f69f0b11c08902117e7f5
 Patch1:		%{name}-getopt.patch
 Patch2:		%{name}-bashcomp.patch
-Patch3:		pfstools2.patch
-Patch4:		ffmpeg3.patch
 Patch5:		imagemagick7.patch
-Patch6:		ffmpeg4.patch
 URL:		http://gta.nongnu.org/gtatool.html
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
 %{?with_qt:BuildRequires:	OpenGL-devel}
-%{?with_qt:BuildRequires:	QtGui-devel >= 4.8}
-%{?with_qt:BuildRequires:	QtOpenGL-devel >= 4.8}
+%{?with_qt:BuildRequires:	Qt5Gui-devel}
+%{?with_qt:BuildRequires:	Qt5OpenGL-devel}
+%{?with_qt:BuildRequires:	Qt5Widgets-devel}
 BuildRequires:	autoconf >= 2.65
 BuildRequires:	automake >= 1:1.11.1
 %{?with_dcmtk:BuildRequires:	dcmtk-devel}
@@ -52,6 +50,7 @@ BuildRequires:	automake >= 1:1.11.1
 %{?with_qt:BuildRequires:	glew-devel >= 1.6.0}
 BuildRequires:	libgta-devel >= 0.9.4
 %{?with_jpeg:BuildRequires:	libjpeg-devel}
+%{?with_png:BuildRequires:	libpng-devel}
 %{?with_sndfile:BuildRequires:	libsndfile-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2.6
@@ -62,7 +61,7 @@ BuildRequires:	libtool >= 2:2.2.6
 %{?with_pcl:BuildRequires:	pcl-devel >= 1.7}
 %{?with_pfs:BuildRequires:	pfstools-devel >= 2.0}
 BuildRequires:	pkgconfig
-%{?with_qt:BuildRequires:	qt4-build >= 4.8}
+%{?with_qt:BuildRequires:	qt5-build >= 4.8}
 BuildRequires:	rpmbuild(macros) >= 1.673
 BuildRequires:	tar >= 1:1.22
 %{?with_teem:BuildRequires:	teem-devel}
@@ -141,6 +140,18 @@ gtatool module to convert from/to GDAL supported formats.
 
 %description conv-gdal -l pl.UTF-8
 Moduł gtatool do konwersji z/do formatów obsługiwanych przez GDAL.
+
+%package conv-png
+Summary:	gtatool module to convert from/to PNG format
+Summary(pl.UTF-8):	Moduł gtatool do konwersji z/do formatu PNG
+Group:		Applications/File
+Requires:	%{name} = %{version}-%{release}
+
+%description conv-png
+gtatool module to convert from/to PNG format.
+
+%description conv-png -l pl.UTF-8
+Moduł gtatool do konwersji z/do formatu PNG.
 
 %package conv-jpeg
 Summary:	gtatool module to convert from/to JPEG formats
@@ -285,13 +296,9 @@ Bashowe uzupełnianie parametrów programu gtatool.
 
 %prep
 %setup -q
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 %build
 %{__libtoolize}
@@ -304,6 +311,7 @@ export CFLAGS="%{rpmcflags} -I/usr/include/netpbm"
 export CXXFLAGS="%{rpmcxxflags} -I/usr/include/netpbm"
 %endif
 %configure \
+	MOC=%{_libdir}/qt5/bin/moc \
 	BASHCOMPLETIONDIR=%{bash_compdir} \
 	--disable-silent-rules \
 	--with-bashcompletion \
@@ -311,6 +319,7 @@ export CXXFLAGS="%{rpmcxxflags} -I/usr/include/netpbm"
 	%{!?with_ffmpeg:--without-ffmpeg} \
 	%{!?with_gdal:--without-gdal} \
 	%{!?with_jpeg:--without-jpeg} \
+	%{!?with_png:--without-png} \
 	%{?with_magick:--with-magick-flavor=ImageMagick} \
 	%{!?with_magick:--without-magick} \
 	%{!?with_matio:--without-matio} \
@@ -384,6 +393,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/gtatool/conv-gdal.so
 %endif
 
+%if %{with png}
+%files conv-png
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/gtatool/conv-png.so
+%endif
+
 %if %{with jpeg}
 %files conv-jpeg
 %defattr(644,root,root,755)
@@ -442,7 +457,6 @@ rm -rf $RPM_BUILD_ROOT
 %files gui
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/gui.so
-%attr(755,root,root) %{_libdir}/gtatool/view.so
 %{_desktopdir}/gta_gui.desktop
 %{_iconsdir}/hicolor/*/apps/gta.png
 %{_iconsdir}/hicolor/scalable/apps/gta.svg
