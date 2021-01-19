@@ -1,6 +1,4 @@
 # TODO: pmd (BR: proprietary libpmdaccess2)
-# libequalizer (pkgconfig(Equalizer) >= 1.0.0) for multi-display OpenGL support
-# libgls (pkgconfig(gls) >= 1.0.0) for stereoscopic-3D OpenGL support
 #
 # Conditional build:
 %bcond_without	apidocs		# do not build and package API docs
@@ -24,24 +22,23 @@
 Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
-Version:	2.2.3
-Release:	7
+Version:	2.4.0
+Release:	1
 License:	GPL v3+
 Group:		Applications/File
 Source0:	https://marlam.de/gta/releases/%{name}-%{version}.tar.xz
-# Source0-md5:	afa7556b180f69f0b11c08902117e7f5
+# Source0-md5:	ea2ea1a0838c614ec8b7b4072c9e6ce1
 Patch0:		%{name}-getopt.patch
 Patch1:		%{name}-bashcomp.patch
 Patch2:		imagemagick7.patch
-Patch3:		pcl-1.9.patch
-Patch4:		pcl-1.11.patch
-URL:		http://gta.nongnu.org/gtatool.html
+Patch3:		pcl-1.11.patch
+URL:		https://marlam.de/gta/
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
 %{?with_qt:BuildRequires:	OpenGL-devel}
-%{?with_qt:BuildRequires:	Qt5Gui-devel}
-%{?with_qt:BuildRequires:	Qt5OpenGL-devel}
-%{?with_qt:BuildRequires:	Qt5Widgets-devel}
+%{?with_qt:BuildRequires:	Qt5Gui-devel >= 5.5}
+%{?with_qt:BuildRequires:	Qt5OpenGL-devel >= 5.5}
+%{?with_qt:BuildRequires:	Qt5Widgets-devel >= 5.5}
 BuildRequires:	autoconf >= 2.65
 BuildRequires:	automake >= 1:1.11.1
 %{?with_dcmtk:BuildRequires:	dcmtk-devel}
@@ -52,7 +49,7 @@ BuildRequires:	automake >= 1:1.11.1
 %{?with_qt:BuildRequires:	glew-devel >= 1.6.0}
 BuildRequires:	libgta-devel >= 0.9.4
 %{?with_jpeg:BuildRequires:	libjpeg-devel}
-%{?with_png:BuildRequires:	libpng-devel}
+%{?with_png:BuildRequires:	libpng-devel >= 1.2.0}
 %{?with_sndfile:BuildRequires:	libsndfile-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2.6
@@ -60,10 +57,10 @@ BuildRequires:	libtool >= 2:2.2.6
 %{?with_muparser:BuildRequires:	muparser-devel}
 %{?with_netcdf:BuildRequires:	netcdf-devel}
 %{?with_netpbm:BuildRequires:	netpbm-devel}
-%{?with_pcl:BuildRequires:	pcl-devel >= 1.7}
+%{?with_pcl:BuildRequires:	pcl-devel >= 1.8}
 %{?with_pfs:BuildRequires:	pfstools-devel >= 2.0}
 BuildRequires:	pkgconfig
-%{?with_qt:BuildRequires:	qt5-build >= 4.8}
+%{?with_qt:BuildRequires:	qt5-build >= 5.5}
 BuildRequires:	rpmbuild(macros) >= 1.673
 BuildRequires:	tar >= 1:1.22
 %{?with_teem:BuildRequires:	teem-devel}
@@ -270,8 +267,10 @@ Moduł gtatool do konwersji z/do formatu Teem (NRRD).
 Summary:	Qt-based GUI module for gtatool
 Summary(pl.UTF-8):	Moduł graficznego interfejsu użytkownika opartego na Qt dla narzędzia gtatool
 Group:		X11/Applications
+Requires(post,postun):	gtk-update-icon-cache
 Requires:	%{name} = %{version}-%{release}
-Requires:	QtGui >= 4.8
+Requires:	Qt5Widgets >= 5.5
+Requires:	hicolor-icon-theme
 
 %description gui
 Qt-based GUI module for gtatool.
@@ -302,7 +301,6 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -352,6 +350,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun	-p /sbin/postshell
 -/usr/sbin/fix-info-dir -c %{_infodir}
+
+%post gui
+%update_icon_cache hicolor
+
+%postun gui
+%update_icon_cache hicolor
 
 %files
 %defattr(644,root,root,755)
@@ -462,7 +466,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/gtatool/gui.so
 %{_desktopdir}/gta_gui.desktop
-%{_iconsdir}/hicolor/*/apps/gta.png
+%{_iconsdir}/hicolor/*x*/apps/gta.png
 %{_iconsdir}/hicolor/scalable/apps/gta.svg
 %endif
 

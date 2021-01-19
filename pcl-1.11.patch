@@ -1,15 +1,15 @@
---- gtatool-2.2.3/configure.ac.orig	2020-08-10 23:42:38.000000000 +0200
-+++ gtatool-2.2.3/configure.ac	2020-08-10 23:49:06.935269223 +0200
-@@ -461,10 +461,11 @@
-         [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.7 >= 1.7], [],
-             [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.8 >= 1.8], [],
-               [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.9 >= 1.9], [],
+--- gtatool-2.4.0/configure.ac.orig	2021-01-18 22:23:34.750695823 +0100
++++ gtatool-2.4.0/configure.ac	2021-01-18 22:26:18.056477786 +0100
+@@ -460,10 +460,11 @@
+     PKG_CHECK_MODULES([libpcl_io], [pcl_io >= 1.8], [],
+         [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.9 >= 1.9], [],
+             [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.10 >= 1.10], [],
 +              [PKG_CHECK_MODULES([libpcl_io], [pcl_io-1.11 >= 1.11], [],
                  [pcd="no "
                  AC_MSG_WARN([PCL io library not found:])
                  AC_MSG_WARN([$libpcl_io_PKG_ERRORS])
--                AC_MSG_WARN([Disabled the from-pcd and to-pcd commands.])])])])])
-+                AC_MSG_WARN([Disabled the from-pcd and to-pcd commands.])])])])])])
+-                AC_MSG_WARN([Disabled the from-pcd and to-pcd commands.])])])])
++                AC_MSG_WARN([Disabled the from-pcd and to-pcd commands.])])])])])
  fi
  AC_DEFINE_UNQUOTED([WITH_PCD], [`if test "$pcd" = "yes"; then echo "1"; else echo "0"; fi`], [Use pcd?])
  AM_CONDITIONAL([WITH_PCD], [test "$pcd" = "yes"])
