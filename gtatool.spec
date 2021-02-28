@@ -285,9 +285,7 @@ Summary(pl.UTF-8):	Bashowe uzupełnianie parametrów programu gtatool
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
 Requires:	bash-completion >= 2
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description -n bash-completion-gtatool
 Bash completion for gtatool command.
