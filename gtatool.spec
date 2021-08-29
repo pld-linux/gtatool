@@ -23,7 +23,7 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	2.4.0
-Release:	2
+Release:	3
 License:	GPL v3+
 Group:		Applications/File
 Source0:	https://marlam.de/gta/releases/%{name}-%{version}.tar.xz
@@ -32,6 +32,7 @@ Patch0:		%{name}-getopt.patch
 Patch1:		%{name}-bashcomp.patch
 Patch2:		imagemagick7.patch
 Patch3:		pcl-1.11.patch
+Patch4:		gcc11.patch
 URL:		https://marlam.de/gta/
 %{?with_magick:BuildRequires:	ImageMagick-c++-devel}
 %{?with_openexr:BuildRequires:	OpenEXR-devel}
@@ -299,6 +300,7 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
