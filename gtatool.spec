@@ -13,7 +13,7 @@
 %bcond_without	matio		# MAT conv module (MATLAB import/export, based on [lib]matio)
 %bcond_without	netcdf		# NetCDF conv module
 %bcond_without	netpbm		# NetPBM conv module
-%bcond_without	openexr		# EXR conv module (based on OpenEXR)
+%bcond_with	openexr		# EXR conv module (based on OpenEXR)
 %bcond_without	pcl		# PCD conv module (based on PCL's libpcl_io)
 %bcond_without	pfs		# PFS conv module
 %bcond_without	sndfile		# sndfile conv module
@@ -23,7 +23,7 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	2.4.0
-Release:	5
+Release:	6
 License:	GPL v3+
 Group:		Applications/File
 Source0:	https://marlam.de/gta/releases/%{name}-%{version}.tar.xz
@@ -328,7 +328,7 @@ export CXXFLAGS="%{rpmcxxflags} -I/usr/include/netpbm -std=gnu++14"
 	%{!?with_muparser:--without-muparser} \
 	%{!?with_netcdf:--without-netcdf} \
 	%{!?with_netpbm:--without-netpbm} \
-	%{!?with_openexr:--without-openexr} \
+	%{!?with_openexr:--without-exr} \
 	%{!?with_pcl:--without-pcd} \
 	%{!?with_pfs:--without-pfs} \
 	%{!?with_qt:--without-qt} \
