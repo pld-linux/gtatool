@@ -5,7 +5,7 @@
 %bcond_without	qt		# Qt-based GUI
 %bcond_without	muparser	# compute component module (based on MuParser)
 %bcond_without	dcmtk		# DCMTK conv module
-%bcond_without	ffmpeg		# FFmpeg conv module
+%bcond_with	ffmpeg		# FFmpeg conv module
 %bcond_without	gdal		# GDAL conv module
 %bcond_without	png		# PNG conv module
 %bcond_without	jpeg		# JPEG conv module (based on libjpeg)
@@ -23,7 +23,7 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	2.4.0
-Release:	8
+Release:	9
 License:	GPL v3+
 Group:		Applications/File
 Source0:	https://marlam.de/gta/releases/%{name}-%{version}.tar.xz
