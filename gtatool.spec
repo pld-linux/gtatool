@@ -23,7 +23,7 @@ Summary:	Tools to manipulate Generic Tagged Array (GTA) files
 Summary(pl.UTF-8):	Narzędzia do obróbki plików GTA (ogólnych tablic etykietowanych)
 Name:		gtatool
 Version:	2.4.0
-Release:	13
+Release:	14
 License:	GPL v3+
 Group:		Applications/File
 Source0:	https://marlam.de/gta/releases/%{name}-%{version}.tar.xz
@@ -302,8 +302,14 @@ Bashowe uzupełnianie parametrów programu gtatool.
 %patch -P3 -p1
 %patch -P4 -p1
 
+mkdir -p po
+# gettextize is needed only for ac/am macros, there are no translations here
+echo "all:" >po/Makefile
+echo "install:" >>po/Makefile
+
 %build
 %{__libtoolize}
+%{__gettextize}
 %{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
@@ -334,6 +340,7 @@ export CXXFLAGS="%{rpmcxxflags} -I/usr/include/netpbm -std=gnu++14"
 	%{!?with_qt:--without-qt} \
 	%{!?with_sndfile:--without-sndfile} \
 	%{!?with_teem:--without-teem}
+
 %{__make}
 
 %install
